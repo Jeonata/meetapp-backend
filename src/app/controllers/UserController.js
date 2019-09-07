@@ -72,10 +72,6 @@ class UserController {
       email,
     });
   }
-
-  // async update(req, res) {
-
-  // }
 }
 
 export default new UserController();
