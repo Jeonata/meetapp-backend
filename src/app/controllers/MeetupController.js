@@ -7,7 +7,6 @@ import {
   startOfDay,
   endOfDay,
 } from 'date-fns';
-import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import Meetup from '../models/Meetup';
 
