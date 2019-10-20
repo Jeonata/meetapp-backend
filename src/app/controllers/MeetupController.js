@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import {
-  startOfHour,
+  startOfMinute,
   parseISO,
   isBefore,
   startOfDay,
@@ -49,7 +49,7 @@ class MeetupController {
     /**
      * Check for past dates
      */
-    const hourStart = startOfHour(parseISO(req.body.date));
+    const hourStart = startOfMinute(parseISO(req.body.date));
 
     if (isBefore(hourStart, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
@@ -99,7 +99,7 @@ class MeetupController {
     /**
      * Check for past dates in update
      */
-    const hourStart = startOfHour(parseISO(req.body.date));
+    const hourStart = startOfMinute(parseISO(req.body.date));
 
     if (isBefore(hourStart, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
