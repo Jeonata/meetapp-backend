@@ -7,6 +7,7 @@ import {
   startOfDay,
   endOfDay,
 } from 'date-fns';
+import File from '../models/File';
 import User from '../models/User';
 import Meetup from '../models/Meetup';
 
@@ -26,11 +27,21 @@ class MeetupController {
           [Op.between]: [startOfDay(parseDate), endOfDay(parseDate)],
         },
       },
-      include: [User],
+      include: [
+        {
+          model: File,
+          as: 'image',
+          attributes: ['id', 'path', 'url'],
+        },
+        {
+          model: User,
+          as: 'provider',
+        },
+      ],
       limit: 10,
       offset: 10 * page - 10,
     });
-    return res.json({ meetups });
+    return res.json(meetups);
   }
 
   async store(req, res) {

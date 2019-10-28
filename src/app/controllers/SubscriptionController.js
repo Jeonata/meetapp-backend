@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import Queue from '../../lib/Queue';
 import Meetup from '../models/Meetup';
+import File from '../models/File';
 import Subscription from '../models/Subscription';
 import User from '../models/User';
 import SubscriptionMail from '../jobs/SubscriptionMail';
@@ -20,6 +21,17 @@ class MeetupController {
             },
           },
           required: true,
+          include: [
+            {
+              model: User,
+              as: 'provider',
+            },
+            {
+              model: File,
+              as: 'image',
+              attributes: ['id', 'path', 'url'],
+            },
+          ],
         },
       ],
       order: [[Meetup, 'date']],
@@ -30,7 +42,10 @@ class MeetupController {
 
   async store(req, res) {
     const meetup = await Meetup.findByPk(req.params.meetupId, {
-      include: [User],
+      include: {
+        model: User,
+        as: 'provider',
+      },
     });
 
     /**
@@ -115,6 +130,14 @@ class MeetupController {
     });
 
     return res.json(subscription);
+  }
+
+  async delete(req, res) {
+    const subscription = await Subscription.findByPk(req.params.id);
+
+    await subscription.destroy();
+
+    return res.json(`Object deleted`);
   }
 }
 
